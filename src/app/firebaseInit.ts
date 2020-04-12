@@ -1,5 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.apiKey,
@@ -12,9 +14,14 @@ const firebaseConfig = {
   measurementId: process.env.measurementId,
 };
 
-console.log(firebaseConfig);
+// https://github.com/zeit/next.js/issues/1999
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
-firebase.initializeApp(firebaseConfig);
-const auth: firebase.auth.Auth = firebase.auth();
+const auth: firebase.auth.Auth = firebase.app().auth();
+const db: firebase.firestore.Firestore = firebase.firestore();
+const storage: firebase.storage.Storage = firebase.storage();
+const storageRef: firebase.storage.Reference = storage.ref();
 
-export { firebase, auth };
+export { firebase, auth, db, storage, storageRef };

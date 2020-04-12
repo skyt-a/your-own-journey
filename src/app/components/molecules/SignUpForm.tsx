@@ -1,32 +1,55 @@
 import TextField from '../atoms/TextField';
 import { InputProp } from '../../hooks/useInput';
-import styled from 'styled-components';
+/** @jsx jsx */
+import { css, jsx } from '@emotion/core';
+import styled from '@emotion/styled';
+import GoogleSignIn from '../atoms/GoogleSignIn';
+import TwitterSignIn from '../atoms/TwitterSignIn';
+import FacebookSignIn from '../atoms/FacebookSignIn';
+import { Button } from '../atoms/Button';
+import MailSignIn from '../atoms/MailSignIn';
 
 export interface SignUpFormProps {
   mail: InputProp;
   password: InputProp;
-  onSubmit: () => Promise<void>;
 }
 
-const SignUpForm: React.FC<SignUpFormProps> = ({ mail, password, onSubmit }: SignUpFormProps) => {
+const SignUpForm: React.FC<SignUpFormProps> = ({ mail, password }: SignUpFormProps) => {
   return (
     <SignUpFormWrapper>
-      <TextFieldSignUp {...mail} />
-      <TextFieldSignUp type="password" {...password} />
-      <button type="button" onClick={onSubmit}>
-        新規登録
-      </button>
+      <GoogleSignIn />
+      <TwitterSignIn />
+      <FacebookSignIn />
+      <MailSignInWrapper>
+        <TextFieldSignUp {...mail} />
+        <TextFieldSignUp type="password" {...password} />
+        <MailSignIn mail={mail.value} password={password.value} />
+      </MailSignInWrapper>
     </SignUpFormWrapper>
   );
 };
 
 const SignUpFormWrapper = styled.article`
-  text-align: center;
+  display: grid;
+  grid-auto-columns: min-content;
+  justify-content: center;
+  row-gap: 8px;
+`;
+
+const MailSignInWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
 `;
 
 const TextFieldSignUp = styled(TextField)`
   width: 80%;
-  margin: 12px auto;
+  margin: 2px auto 0;
+
+  &:last-of-type {
+    margin-bottom: 8px;
+  }
 `;
 
 export default SignUpForm;

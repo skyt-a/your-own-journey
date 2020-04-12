@@ -1,5 +1,6 @@
 require('dotenv').config();
-module.exports = {
+const withSass = require('@zeit/next-sass');
+module.exports = withSass({
   distDir: '../../dist/functions/next',
   env: {
     apiKey: process.env.apiKey,
@@ -11,4 +12,4 @@ module.exports = {
     appId: process.env.appId,
     measurementId: process.env.measurementId,
   },
-};
+});

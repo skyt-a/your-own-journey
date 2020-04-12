@@ -1,16 +1,22 @@
 import { useInput } from '../hooks/useInput';
-import { auth } from '../firebaseInit';
 import SignUpForm, { SignUpFormProps } from '../components/molecules/SignUpForm';
+import { useContext } from 'react';
+import { StoreContext } from './_app';
+import { useCheckUserExists } from '../hooks/useCheckUserExists';
+import { useRouter } from 'next/router';
+import { useSignIn } from '../hooks/useSignIn';
 
 const SignUp: React.FC = () => {
   const mail = useInput('');
   const password = useInput('');
-  const onSubmit = async (): Promise<void> => {
-    await auth
-      .createUserWithEmailAndPassword(mail.value, password.value)
-      .then(user => console.log(user));
-  };
-  const signUpProps: SignUpFormProps = { mail, password, onSubmit };
+  const signUpProps: SignUpFormProps = { mail, password };
+  const store = useContext(StoreContext);
+  const userExists = useCheckUserExists(store.user?.uid);
+  const router = useRouter();
+  useSignIn();
+  if (store.user?.uid && !userExists) {
+    router.push('/Register');
+  }
   return <SignUpForm {...signUpProps} />;
 };
 
